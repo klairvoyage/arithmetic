@@ -93,3 +93,45 @@ class ArithmeticExpressionTests extends AnyFunSuite:
   test("all: parses expressions with nested arithmetic expressions") {
     assert(pretty(Pow(Mult(Div(Plus(Num(42), Minus(Num(69))), Num(9)), Minus(Num(1))), Num(1))) === "((((42 + (-69)) / 9) * (-1)) ^ 1)")
   }
+
+  // basic tests for evaluate w/lists
+  test("Num: evaluates lists with whole numbers") {
+    assert(evaluate(List(Num(42))) === List(42.0))
+  }
+  test("Minus: evaluates lists with negative numbers") {
+    assert(evaluate(List(Minus(Num(42)))) === List(-42.0))
+  }
+  test("Plus: evaluates lists with addition") {
+    assert(evaluate(List(Plus(Num(42), Num(69)))) === List(111.0))
+  }
+  test("Mult: evaluates lists with multiplication") {
+    assert(evaluate(List(Mult(Num(4), Num(6)))) === List(24.0))
+  }
+  test("Div: evaluates lists with division") {
+    assert(evaluate(List(Div(Num(42), Num(2)))) === List(21.0))
+  }
+  test("Pow: evaluates lists with exponentiations") {
+    assert(evaluate(List(Pow(Num(2), Num(10)))) === List(1024.0))
+  }
+
+  // advanced tests for evaluate w/lists
+  test("Num, Minus, Plus: evaluates lists with different arithmetic operations") {
+    assert(evaluate(List(Num(42), Minus(Num(42)), Plus(Num(42), Num(69)))) === List(42.0, -42.0, 111.0))
+  }
+  test("Mult, Div, Pow: evaluates lists with different arithmetic operations") {
+    assert(evaluate(List(Mult(Num(4), Num(6)), Div(Num(42), Num(2)), Pow(Num(2), Num(10)))) === List(24.0, 21.0, 1024.0))
+  }
+  test("all: evaluates lists with nested arithmetic expressions") {
+    assert(evaluate(List(Mult(Num(23), Num(-3)), Pow(Div(Plus(Num(42), Minus(Num(69))), Num(9)), Num(1)))) === List(-69, -3.0))
+  }
+  test("supports empty lists") {
+    assert(evaluate(List()) === List())
+  }
+  test("Div: evaluates lists with illegal division") {
+    val actual = evaluate(List(Div(Num(420), Num(0)), Div(Num(1), Minus(Num(3)))))
+    val expected = List(Double.NaN, -0.33)
+    assert(actual.length === expected.length)
+    for ((actual, expected) <- actual.zip(expected)) (actual, expected) match
+      case (Double.NaN, Double.NaN) => assert(true)
+      case _ => actual === expected
+  }

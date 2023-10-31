@@ -32,3 +32,15 @@ object ArithmeticExpression:
     case Mult(multiplicand, multiplier) => s"(${pretty(multiplicand)} * ${pretty(multiplier)})"
     case Div(dividend, divisor) => s"(${pretty(dividend)} / ${pretty(divisor)})"
     case Pow(base, exponent) => s"(${pretty(base)} ^ ${pretty(exponent)})"
+
+  def evaluate(expressions: List[ArithmeticExpression]): List[Double] =
+    expressions.map(expression => evaluate(expression))
+
+  def showResults(expressions: List[ArithmeticExpression]): String =
+    val results: List[String] = expressions.map {
+      expression =>
+        val prettyExpression = pretty(expression)
+        val result = evaluate(expression)
+        s"$prettyExpression = $result"
+    }
+    results.mkString("\n")
