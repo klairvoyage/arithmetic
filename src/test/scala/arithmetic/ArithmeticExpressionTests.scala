@@ -24,6 +24,9 @@ class ArithmeticExpressionTests extends AnyFunSuite:
   test("Div: evaluates division") {
     assert(evaluate(Div(Num(42), Num(2))) === 21.0)
   }
+  test("Pow: evaluates exponentiations") {
+    assert(evaluate(Pow(Num(2), Num(10))) === 1024.0)
+  }
 
   // advanced tests for evaluate
   test("Minus: supports negating negative numbers") {
@@ -45,7 +48,13 @@ class ArithmeticExpressionTests extends AnyFunSuite:
     assert(evaluate(Div(Num(420), Num(0))).isNaN)
   }
   test("all: supports nested arithmetic expressions") {
-    assert(evaluate(Mult(Div(Plus(Num(42), Minus(Num(69))), Num(9)), Minus(Num(1)))) === 3.0)
+    assert(evaluate(Pow(Mult(Div(Plus(Num(42), Minus(Num(69))), Num(9)), Minus(Num(1))), Num(1))) === 3.0)
+  }
+  test("Pow: supports 'to the power of 1'") {
+    assert(evaluate(Pow(Num(1024), Num(1))) === 1024.0)
+  }
+  test("Pow: supports 'to the power of 0'") {
+    assert(evaluate(Pow(Num(1024), Num(0))) === 1.0)
   }
 
   // basic tests for pretty
@@ -64,6 +73,9 @@ class ArithmeticExpressionTests extends AnyFunSuite:
   test("Div: parses expressions with division") {
     assert(pretty(Div(Num(42), Num(2))) === "(42 / 2)")
   }
+  test("Pow: parses expressions with exponentiations") {
+    assert(pretty(Pow(Num(2), Num(10))) === "(2 ^ 10)")
+  }
 
   // advanced tests for pretty
   test("Minus: parses expressions negating negative numbers") {
@@ -79,5 +91,5 @@ class ArithmeticExpressionTests extends AnyFunSuite:
     assert(pretty(Div(Num(1), Minus(Num(3)))) === "(1 / (-3))")
   }
   test("all: parses expressions with nested arithmetic expressions") {
-    assert(pretty(Mult(Div(Plus(Num(42), Minus(Num(69))), Num(9)), Minus(Num(1)))) === "(((42 + (-69)) / 9) * (-1))")
+    assert(pretty(Pow(Mult(Div(Plus(Num(42), Minus(Num(69))), Num(9)), Minus(Num(1))), Num(1))) === "((((42 + (-69)) / 9) * (-1)) ^ 1)")
   }

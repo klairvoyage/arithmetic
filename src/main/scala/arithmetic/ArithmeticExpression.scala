@@ -6,6 +6,7 @@ enum ArithmeticExpression:
   case Plus(augend: ArithmeticExpression, addend: ArithmeticExpression)
   case Mult(multiplicand: ArithmeticExpression, multiplier: ArithmeticExpression)
   case Div(dividend: ArithmeticExpression, divisor: ArithmeticExpression)
+  case Pow(base: ArithmeticExpression, exponent: ArithmeticExpression)
 
 object ArithmeticExpression:
   def evaluate(expression: ArithmeticExpression): Double = expression match
@@ -16,6 +17,11 @@ object ArithmeticExpression:
     case Div(dividend, divisor) =>
       if (evaluate(divisor) == 0) Double.NaN
       else evaluate(dividend) / evaluate(divisor)
+    case Pow(base, exponent) =>
+      val exponentValue = evaluate(exponent).toInt
+      if (exponentValue > 0) evaluate(base) * evaluate(Pow(base, Num(exponentValue - 1)))
+      else if (exponentValue < 0) (1 / evaluate(base)) * evaluate(Pow(base, Num(exponentValue + 1)))
+      else 1.0
 
   def pretty(expression: ArithmeticExpression): String = expression match
     case Num(foo) =>
@@ -25,3 +31,4 @@ object ArithmeticExpression:
     case Plus(augend, addend) => s"(${pretty(augend)} + ${pretty(addend)})"
     case Mult(multiplicand, multiplier) => s"(${pretty(multiplicand)} * ${pretty(multiplier)})"
     case Div(dividend, divisor) => s"(${pretty(dividend)} / ${pretty(divisor)})"
+    case Pow(base, exponent) => s"(${pretty(base)} ^ ${pretty(exponent)})"
