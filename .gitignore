@@ -1,0 +1,11 @@
+# scala/sbt
+target/
+.bsp/
+*.class
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea
+out/
