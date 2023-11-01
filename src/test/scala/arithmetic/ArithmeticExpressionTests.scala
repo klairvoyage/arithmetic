@@ -6,7 +6,7 @@ import org.scalactic.TolerantNumerics
 import org.scalatest.funsuite.AnyFunSuite
 
 class ArithmeticExpressionTests extends AnyFunSuite:
-  given dblEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.01)
+  given dblEquality: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(0.005)
 
   // basic tests for evaluate
   test("Num: evaluates whole numbers") {
@@ -55,6 +55,9 @@ class ArithmeticExpressionTests extends AnyFunSuite:
   }
   test("Pow: supports 'to the power of 0'") {
     assert(evaluate(Pow(Num(1024), Num(0))) === 1.0)
+  }
+  test("Pow: supports 'to the power of [negative numbers]'") {
+    assert(evaluate(Pow(Num(6), Num(-1))) === 0.17)
   }
 
   // basic tests for pretty
