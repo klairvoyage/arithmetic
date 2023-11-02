@@ -34,7 +34,7 @@ object ArithmeticExpression:
     case Pow(base, exponent) => s"(${pretty(base)} ^ ${pretty(exponent)})"
 
   def evaluate(expressions: List[ArithmeticExpression]): List[Double] =
-    expressions.map(expression => evaluate(expression))
+    expressions.map(evaluate)
 
   def showResults(expressions: List[ArithmeticExpression]): String =
     val results: List[String] = expressions.map {
